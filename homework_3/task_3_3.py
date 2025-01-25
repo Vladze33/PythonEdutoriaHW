@@ -1,4 +1,21 @@
-# Создайте виртуальное окружение для проекта, используя модуль venv. В этом окружении установите несколько модулей, таких как requests и BeautifulSoup4, с помощью pip. После установки модулей напишите скрипт, который будет использовать эти модули для выполнения следующих задач:
-# Получение данных с веб-сайта с использованием модуля requests.
-# Парсинг HTML-кода с веб-сайта с использованием BeautifulSoup4.
-# Убедитесь, что ваш скрипт работает корректно в виртуальном окружении и не влияет на глобальные установки Python. В качестве url можно взять https://
+import requests
+from bs4 import BeautifulSoup
+
+url_example = "https://github.com/vladze33/PythonEdutoriaHW"
+session = requests.Session()
+response = session.get(url_example)
+
+try:
+    soup = BeautifulSoup(response.text, features="html.parser")
+    if response:
+        hw3_element = soup.select("#folder-row-2.react-directory-row .react-directory-filename-cell a")[0]
+        hw3_row_title = hw3_element.text
+        hw3_relative_ref = hw3_element.attrs["href"]
+
+        print("Repository title: ", soup.title.text)
+        print("Homework:", f"{hw3_row_title} (href={hw3_relative_ref})")
+    else:
+        print("Error:", f"{response.status_code} (title={soup.title.text})")
+    print("Elapsed:", response.elapsed)
+except Exception as e:
+    print("Caught error:", e)
